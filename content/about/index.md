@@ -37,4 +37,4 @@ Scuba diver, cyclist, traveler, board game enthusiast. Based in Berkeley, CA.
 ---
 
 *Currently open to IAM Engineering opportunities.*
-[LinkedIn](https://www.linkedin.com/in/jordan-perry-454b76216/)
+[LinkedIn](https://www.linkedin.com/in/jordanaperry/)
