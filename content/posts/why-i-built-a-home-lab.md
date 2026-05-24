@@ -30,17 +30,18 @@ rack is still in progress — that's a future post.
 
 ## A Detour Through the Nanoscale World
 
-In November 2024 I stepped away from enterprise IT to try something completely 
-different. I became a Field Service Engineer maintaining electron microscopes 
-in the Materials Science division — specifically the kind used in semiconductor 
-manufacturing. The microscopes I work with help engineers inspect silicon wafers 
-at the nanometer scale, validating the precision etching and deposition processes 
-that produce the chips powering everything from your phone to AI data centers. 
-With AI accelerating chip demand globally, the work feels genuinely important.
+In November 2024 I made a deliberate pivot to try something completely different. 
+I became a Field Service Engineer maintaining electron microscopes in the Materials 
+Science division — specifically the kind used in semiconductor manufacturing. The 
+microscopes I work on help engineers inspect silicon wafers at the nanometer scale, 
+validating the precision etching and deposition processes that produce the chips 
+powering everything from your phone to AI data centers. With AI accelerating chip 
+demand globally, the work feels genuinely important and I love it.
 
-It's a fascinating job and I don't regret it for a second. But IT has always been 
-my passion, and after a year of working in a world where I'm the one calling the 
-sysadmin instead of being one — I'm ready to come back. Just through a different door.
+It's also given me a different perspective on technology — seeing firsthand how the 
+hardware that runs the internet actually gets made. But IT has always been a parallel 
+passion, and the homelab has always been running in the background. This rebuild is 
+about leveling up those skills intentionally and documenting the journey.
 
 ## Why IAM Engineering
 
