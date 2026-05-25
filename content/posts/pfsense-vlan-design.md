@@ -1,4 +1,10 @@
-
+---
+title: "pfSense: The Hardware and VLAN Design"
+date: 2026-05-24
+draft: false
+tags: ["homelab", "networking", "pfsense", "vlan"]
+series: ["Homelab Journey"]
+---
 The first thing I did when I decided to rebuild this lab was wipe pfSense back to factory defaults.
 
 Not because the old config was broken. Because it was a mess — years of accumulated rules, interfaces I didn't remember adding, DHCP leases for devices that no longer existed. Starting clean felt right. And since I was switching to a Ubiquiti switch and access point for the first time, a clean slate made the design decisions easier to think through from scratch.

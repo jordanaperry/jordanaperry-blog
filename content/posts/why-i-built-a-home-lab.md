@@ -1,4 +1,10 @@
-
+---
+title: "Why I Built a Home Lab"
+date: 2026-05-20
+draft: false
+tags: ["homelab", "career", "iam"]
+series: ["Homelab Journey"]
+---
 I've had some version of a home lab for as long as I've been in IT.
 
 It started the way it does for most people — bringing work home because the 
