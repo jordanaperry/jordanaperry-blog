@@ -4,6 +4,7 @@ date: 2026-05-24
 draft: false
 tags: ["homelab", "networking", "pfsense", "vlan"]
 series: ["Homelab Journey"]
+description: "Starting from a factory reset — the hardware, the VLAN design, and why everything is named after ocean zones."
 ---
 The first thing I did when I decided to rebuild this lab was wipe pfSense back to factory defaults.
 

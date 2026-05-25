@@ -4,6 +4,7 @@ date: 2026-05-20
 draft: false
 tags: ["homelab", "career", "iam"]
 series: ["Homelab Journey"]
+description: "Why I downsized from an 8U rack, discovered the minilab rabbit hole, and decided IAM engineering was the path back into IT."
 ---
 I've had some version of a home lab for as long as I've been in IT.
 
