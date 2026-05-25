@@ -1,0 +1,246 @@
+<svg width="100%" viewBox="0 0 680 820" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Home lab network topology diagram</title>
+<desc>Physical and logical network diagram showing pfSense krakenfw, Unifi switch manifold, AP buoy, Proxmox leviathan with two NICs and all containers, NAS wreck, and end devices with VLANs and port assignments</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <style>
+    text { font-family: system-ui, -apple-system, sans-serif; }
+    .th { font-size: 14px; font-weight: 500; fill: #2C2C2A; }
+    .ts { font-size: 12px; font-weight: 400; fill: #5F5E5A; }
+
+    .n-gray rect  { fill: #F1EFE8; stroke: #5F5E5A; }
+    .n-gray .th   { fill: #2C2C2A; }
+    .n-gray .ts   { fill: #5F5E5A; }
+
+    .n-coral rect { fill: #FAECE7; stroke: #993C1D; }
+    .n-coral .th  { fill: #4A1B0C; }
+    .n-coral .ts  { fill: #993C1D; }
+
+    .n-teal rect  { fill: #E1F5EE; stroke: #0F6E56; }
+    .n-teal .th   { fill: #085041; }
+    .n-teal .ts   { fill: #0F6E56; }
+
+    .n-amber rect { fill: #FAEEDA; stroke: #BA7517; }
+    .n-amber .th  { fill: #633806; }
+    .n-amber .ts  { fill: #854F0B; }
+
+    .n-purple rect { fill: #EEEDFE; stroke: #534AB7; }
+    .n-purple .th  { fill: #26215C; }
+    .n-purple .ts  { fill: #534AB7; }
+
+    .n-blue rect  { fill: #E6F1FB; stroke: #185FA5; }
+    .n-blue .th   { fill: #042C53; }
+    .n-blue .ts   { fill: #185FA5; }
+
+    @media (prefers-color-scheme: dark) {
+      .th { fill: #D3D1C7; }
+      .ts { fill: #888780; }
+      .n-gray rect  { fill: #444441; stroke: #B4B2A9; }
+      .n-gray .th   { fill: #D3D1C7; }
+      .n-gray .ts   { fill: #B4B2A9; }
+      .n-coral rect { fill: #711813; stroke: #F0997B; }
+      .n-coral .th  { fill: #F5C4B3; }
+      .n-coral .ts  { fill: #F0997B; }
+      .n-teal rect  { fill: #085041; stroke: #5DCAA5; }
+      .n-teal .th   { fill: #9FE1CB; }
+      .n-teal .ts   { fill: #5DCAA5; }
+      .n-amber rect { fill: #633806; stroke: #EF9F27; }
+      .n-amber .th  { fill: #FAC775; }
+      .n-amber .ts  { fill: #EF9F27; }
+      .n-purple rect { fill: #26215C; stroke: #AFA9EC; }
+      .n-purple .th  { fill: #CECBF6; }
+      .n-purple .ts  { fill: #AFA9EC; }
+      .n-blue rect  { fill: #042C53; stroke: #85B7EB; }
+      .n-blue .th   { fill: #B5D4F4; }
+      .n-blue .ts   { fill: #85B7EB; }
+    }
+  </style>
+</defs>
+
+<!-- ISP -->
+<g class="n-gray">
+  <rect x="245" y="20" width="190" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="340" y="40" text-anchor="middle" dominant-baseline="central">ISP modem</text>
+  <text class="ts" x="340" y="57" text-anchor="middle" dominant-baseline="central">WAN</text>
+</g>
+<line x1="340" y1="68" x2="340" y2="104" stroke="#888780" stroke-width="1" marker-end="url(#arrow)" opacity="0.4"/>
+<text class="ts" x="350" y="89" dominant-baseline="central">igb0</text>
+
+<!-- krakenfw -->
+<g class="n-coral">
+  <rect x="210" y="104" width="260" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="340" y="126" text-anchor="middle" dominant-baseline="central">krakenfw</text>
+  <text class="ts" x="340" y="144" text-anchor="middle" dominant-baseline="central">pfSense · 192.168.1.1 · surface</text>
+</g>
+<line x1="340" y1="160" x2="340" y2="200" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.5"/>
+<text class="ts" x="350" y="183" dominant-baseline="central">igb1 trunk · all VLANs</text>
+
+<!-- manifold -->
+<g class="n-gray">
+  <rect x="210" y="200" width="260" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="340" y="222" text-anchor="middle" dominant-baseline="central">manifold</text>
+  <text class="ts" x="340" y="240" text-anchor="middle" dominant-baseline="central">Unifi switch · 192.168.1.2 · surface</text>
+</g>
+
+<!-- Switch fan-out lines -->
+<path d="M226 256 L109 316" fill="none" stroke="#888780" stroke-width="1" marker-end="url(#arrow)" opacity="0.4"/>
+<text class="ts" x="138" y="277">port 8</text>
+<path d="M284 256 L220 316" fill="none" stroke="#888780" stroke-width="1" marker-end="url(#arrow)" opacity="0.4"/>
+<text class="ts" x="234" y="290">port 1</text>
+<path d="M396 256 L430 316" fill="none" stroke="#888780" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.5"/>
+<text class="ts" x="390" y="278">port 2 · NIC1</text>
+<text class="ts" x="390" y="290">trunk · midnight</text>
+<path d="M434 256 L494 316" fill="none" stroke="#BA7517" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.7"/>
+<text class="ts" x="460" y="272">port 3 · NIC2</text>
+<text class="ts" x="460" y="284">abyss · iSCSI</text>
+<path d="M456 256 L598 316" fill="none" stroke="#888780" stroke-width="1" marker-end="url(#arrow)" opacity="0.4"/>
+<text class="ts" x="520" y="272">port 4</text>
+
+<!-- buoy -->
+<g class="n-teal">
+  <rect x="44" y="316" width="130" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="109" y="336" text-anchor="middle" dominant-baseline="central">buoy</text>
+  <text class="ts" x="109" y="354" text-anchor="middle" dominant-baseline="central">Unifi AP · 192.168.1.3</text>
+</g>
+
+<!-- orca -->
+<g class="n-teal">
+  <rect x="182" y="316" width="130" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="247" y="336" text-anchor="middle" dominant-baseline="central">orca</text>
+  <text class="ts" x="247" y="354" text-anchor="middle" dominant-baseline="central">gaming PC · reef 10</text>
+</g>
+
+<!-- leviathan -->
+<g class="n-blue">
+  <rect x="374" y="316" width="196" height="68" rx="8" stroke-width="0.5"/>
+  <text class="th" x="472" y="336" text-anchor="middle" dominant-baseline="central">leviathan</text>
+  <text class="ts" x="472" y="354" text-anchor="middle" dominant-baseline="central">Proxmox · midnight 40</text>
+  <text class="ts" x="472" y="370" text-anchor="middle" dominant-baseline="central">NIC1: VMs · NIC2: iSCSI storage</text>
+</g>
+
+<!-- wreck -->
+<g class="n-gray">
+  <rect x="578" y="316" width="92" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="624" y="336" text-anchor="middle" dominant-baseline="central">wreck</text>
+  <text class="ts" x="624" y="354" text-anchor="middle" dominant-baseline="central">NAS · abyss 50</text>
+</g>
+
+<!-- WiFi from buoy -->
+<path d="M82 372 L62 426" fill="none" stroke="#1D9E75" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arrow)" opacity="0.7"/>
+<path d="M130 372 L186 426" fill="none" stroke="#BA7517" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arrow)" opacity="0.7"/>
+
+<!-- TheReef -->
+<g class="n-teal">
+  <rect x="24" y="426" width="110" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="79" y="444" text-anchor="middle" dominant-baseline="central">TheReef</text>
+  <text class="ts" x="79" y="461" text-anchor="middle" dominant-baseline="central">VLAN 10 · WPA3</text>
+</g>
+
+<!-- TheDrift -->
+<g class="n-amber">
+  <rect x="144" y="426" width="110" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="199" y="444" text-anchor="middle" dominant-baseline="central">TheDrift</text>
+  <text class="ts" x="199" y="461" text-anchor="middle" dominant-baseline="central">VLAN 20 · WPA2</text>
+</g>
+
+<!-- Container lines row 1 -->
+<path d="M406 384 L316 426" fill="none" stroke="#378ADD" stroke-width="1" marker-end="url(#arrow)" opacity="0.45"/>
+<path d="M448 384 L448 426" fill="none" stroke="#7F77DD" stroke-width="1" marker-end="url(#arrow)" opacity="0.45"/>
+<path d="M510 384 L550 426" fill="none" stroke="#378ADD" stroke-width="1" marker-end="url(#arrow)" opacity="0.45"/>
+
+<!-- helm -->
+<g class="n-blue">
+  <rect x="268" y="426" width="110" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="323" y="444" text-anchor="middle" dominant-baseline="central">helm</text>
+  <text class="ts" x="323" y="461" text-anchor="middle" dominant-baseline="central">Unifi ctrl · midnight</text>
+</g>
+
+<!-- blog -->
+<g class="n-purple">
+  <rect x="390" y="426" width="110" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="445" y="444" text-anchor="middle" dominant-baseline="central">blog</text>
+  <text class="ts" x="445" y="461" text-anchor="middle" dominant-baseline="central">Hugo · twilight 30</text>
+</g>
+
+<!-- gitea -->
+<g class="n-blue">
+  <rect x="510" y="426" width="110" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="565" y="444" text-anchor="middle" dominant-baseline="central">gitea</text>
+  <text class="ts" x="565" y="461" text-anchor="middle" dominant-baseline="central">Git server · midnight</text>
+</g>
+
+<!-- Container lines row 2 -->
+<path d="M432 384 L370 524" fill="none" stroke="#378ADD" stroke-width="1" marker-end="url(#arrow)" opacity="0.35"/>
+<path d="M472 384 L520 524" fill="none" stroke="#378ADD" stroke-width="1" marker-end="url(#arrow)" opacity="0.35"/>
+
+<!-- bastion -->
+<g class="n-blue">
+  <rect x="318" y="524" width="120" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="378" y="542" text-anchor="middle" dominant-baseline="central">bastion</text>
+  <text class="ts" x="378" y="559" text-anchor="middle" dominant-baseline="central">SSH jump · midnight</text>
+</g>
+
+<!-- monitor -->
+<g class="n-blue">
+  <rect x="450" y="524" width="130" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="515" y="542" text-anchor="middle" dominant-baseline="central">monitor</text>
+  <text class="ts" x="515" y="559" text-anchor="middle" dominant-baseline="central">Prometheus · Grafana</text>
+</g>
+
+<!-- manta from TheReef -->
+<path d="M79 474 L79 524" fill="none" stroke="#1D9E75" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arrow)" opacity="0.6"/>
+<g class="n-teal">
+  <rect x="24" y="524" width="110" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="79" y="542" text-anchor="middle" dominant-baseline="central">manta</text>
+  <text class="ts" x="79" y="559" text-anchor="middle" dominant-baseline="central">MacBook · reef 10</text>
+</g>
+
+<!-- IoT from TheDrift -->
+<path d="M162 474 L79 628" fill="none" stroke="#BA7517" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arrow)" opacity="0.6"/>
+<path d="M199 474 L199 628" fill="none" stroke="#BA7517" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arrow)" opacity="0.6"/>
+<path d="M234 474 L269 628" fill="none" stroke="#BA7517" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arrow)" opacity="0.6"/>
+
+<!-- nautilus -->
+<g class="n-amber">
+  <rect x="24" y="628" width="110" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="79" y="646" text-anchor="middle" dominant-baseline="central">nautilus</text>
+  <text class="ts" x="79" y="663" text-anchor="middle" dominant-baseline="central">fridge · drift 20</text>
+</g>
+
+<!-- zapper -->
+<g class="n-amber">
+  <rect x="144" y="628" width="110" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="199" y="646" text-anchor="middle" dominant-baseline="central">zapper</text>
+  <text class="ts" x="199" y="663" text-anchor="middle" dominant-baseline="central">microwave · drift 20</text>
+</g>
+
+<!-- hydra -->
+<g class="n-amber">
+  <rect x="264" y="628" width="110" height="48" rx="8" stroke-width="0.5"/>
+  <text class="th" x="319" y="646" text-anchor="middle" dominant-baseline="central">hydra</text>
+  <text class="ts" x="319" y="663" text-anchor="middle" dominant-baseline="central">stove · drift 20</text>
+</g>
+
+<!-- Legend -->
+<line x1="40" y1="710" x2="68" y2="710" stroke="#888780" stroke-width="1.5" opacity="0.5"/>
+<text class="ts" x="74" y="714">wired trunk</text>
+<line x1="160" y1="710" x2="188" y2="710" stroke="#BA7517" stroke-width="1.5" opacity="0.7"/>
+<text class="ts" x="194" y="714">iSCSI storage link</text>
+<line x1="316" y1="710" x2="344" y2="710" stroke="#888780" stroke-width="1" stroke-dasharray="4 3" opacity="0.6"/>
+<text class="ts" x="350" y="714">WiFi / virtual</text>
+<rect class="n-coral" x="452" y="704" width="12" height="12" rx="2" stroke-width="0.5"/>
+<text class="ts" x="470" y="714">firewall</text>
+<rect class="n-blue" x="520" y="704" width="12" height="12" rx="2" stroke-width="0.5"/>
+<text class="ts" x="538" y="714">midnight</text>
+<rect class="n-purple" x="594" y="704" width="12" height="12" rx="2" stroke-width="0.5"/>
+<text class="ts" x="612" y="714">twilight</text>
+<rect class="n-teal" x="40" y="726" width="12" height="12" rx="2" stroke-width="0.5"/>
+<text class="ts" x="58" y="736">reef</text>
+<rect class="n-amber" x="94" y="726" width="12" height="12" rx="2" stroke-width="0.5"/>
+<text class="ts" x="112" y="736">drift (IoT)</text>
+<rect class="n-gray" x="178" y="726" width="12" height="12" rx="2" stroke-width="0.5"/>
+<text class="ts" x="196" y="736">surface / abyss</text>
+
+</svg>
