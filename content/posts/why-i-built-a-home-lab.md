@@ -1,4 +1,5 @@
 ---
+title: "Why I Built a Home Lab"
 date: 2026-05-20
 draft: false
 tags: ["homelab", "career", "iam"]
