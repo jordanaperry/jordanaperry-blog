@@ -5,6 +5,10 @@ draft: false
 tags: ["homelab", "networking", "pfsense", "firewall", "security"]
 series: ["Homelab Journey"]
 description: "Default deny, aliases, and the DNS gotcha that will cost you an hour if you don't know about it"
+cover:
+  image: "/images/banners/banner-post-03.svg"
+  alt: "pfSense: Firewall Rules and Network Segmentation"
+  relative: false
 ---
 The VLAN design from the last post is just labels without firewall rules. Traffic doesn't respect VLAN boundaries automatically — pfSense has to be explicitly told what's allowed to cross them. This post covers how I wrote those rules and the philosophy behind them.
 
@@ -31,6 +35,9 @@ Before writing a single rule I created aliases — named references for IPs and 
 | MIDNIGHT | Network | 192.168.40.0/24 |
 | TWILIGHT | Network | 192.168.30.0/24 |
 | REEF | Network | 192.168.10.0/24 |
+
+![Firewall → Aliases — the full alias list showing all five entries](/images/Firewall-Aliases.png)
+*Firewall → Aliases — the full alias list showing all five entries*
 
 `RFC1918` covers all private address space — the entire range of IPs that can never appear on the public internet. Any rule that says "block RFC1918" is blocking access to every private network in one shot. That's the workhorse alias.
 
@@ -74,6 +81,9 @@ Rules are evaluated top to bottom. First match wins. Order matters.
 | 4 | Block | reef net | RFC1918 |
 | 5 | Pass | reef net | any |
 
+![Firewall → Rules → reef — showing all rules in order with the DNS pass rule at the top](/images/Firewall-Rules-Reef.png)
+*Firewall → Rules → reef — showing all rules in order with the DNS pass rule at the top*
+
 Reef can reach the NAS and internal servers. It cannot reach IoT devices on drift or public-facing VMs on twilight — those are both covered by the RFC1918 block. It can reach the internet. A compromised device on reef cannot pivot to anything it shouldn't touch.
 
 **drift (IoT)**
@@ -84,6 +94,8 @@ Reef can reach the NAS and internal servers. It cannot reach IoT devices on drif
 | 2 | Block | drift net | RFC1918 |
 | 3 | Pass | drift net | any |
 
+![Firewall → Rules → drift — showing the clean two-rule IoT setup](/images/Firewall-Rules-Drift.png)
+*Firewall → Rules → drift — showing the clean two-rule IoT setup*
 Two substantive rules. IoT devices get DNS and internet. They get nothing else. The fridge cannot reach the NAS, the MacBook, or anything on any other VLAN.
 
 **twilight (DMZ)**
@@ -114,6 +126,9 @@ Internal servers can reach the NAS for storage and the internet for updates. The
 | 2 | Pass | MIDNIGHT | abyss net |
 | 3 | Block | any | any |
 
+![Firewall → Rules → abyss — showing the inbound-only config with outbound block](/images/Firewall-Rules-Abyss.png)
+*Firewall → Rules → abyss — showing the inbound-only config with outbound block*
+
 The NAS only accepts connections from trusted devices and internal servers. Everything else is blocked — including outbound traffic initiated by the NAS itself. A storage volume that can make outbound connections is a liability. This one blocks it entirely.
 
 **surface (management)**
@@ -123,6 +138,9 @@ The NAS only accepts connections from trusted devices and internal servers. Ever
 | 1 | Pass | surface net | 192.168.1.1:8443 (pfSense GUI) |
 | 2 | Pass | surface net | 192.168.40.20:8080,8443 (Unifi controller) |
 | 3 | Block | surface net | any |
+
+![Firewall → Rules → surface — showing the locked-down management rules](/images/Firewall-Rules-Surface.png)
+*Firewall → Rules → surface — showing the locked-down management rules*
 
 Management devices can reach pfSense and the Unifi controller. Nothing else. Note that port 8080 is the Unifi device inform port — without it, the switch and AP show as offline in the controller even though they're physically connected. Learned that one the hard way.
 
