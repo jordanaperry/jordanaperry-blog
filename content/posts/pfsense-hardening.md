@@ -5,6 +5,10 @@ draft: false
 tags: ["homelab", "networking", "pfsense", "security", "hardening"]
 series: ["Homelab Journey"]
 description: "SSH keys, GUI hardening, killing unnecessary services, and automated config backups to the NAS."
+cover:
+  image: "/images/banners/banner-post-06.svg"
+  alt: "pfSense: Security Hardening"
+  relative: false
 ---
 A freshly installed pfSense is reasonably secure out of the box. But reasonable isn't the same as hardened. This post covers everything I did to lock down `krakenfw` — from SSH key authentication to automated config backups — and a few specific gotchas with the Synology NAS that took longer than they should have.
 
@@ -26,7 +30,12 @@ Accept the default path (`~/.ssh/id_ed25519`) and set a strong passphrase. Then 
 cat ~/.ssh/id_ed25519.pub
 ```
 
-In pfSense: **System → User Manager → admin → Authorized SSH Keys** — paste the output. Then test it before disabling password auth:
+In pfSense: **System → User Manager → admin → Authorized SSH Keys** — paste the output.
+
+![System → User Manager → admin — showing the authorized SSH keys field populated](/images/SSH-Key.png)
+*System → User Manager → admin — showing the authorized SSH keys field populated*
+
+Then test it before disabling password auth:
 
 ```bash
 ssh -i ~/.ssh/id_ed25519 admin@192.168.1.1
@@ -88,6 +97,9 @@ A few smaller items worth doing:
 
 **Disable IPv6** — I don't run IPv6 in this lab and every enabled protocol is a potential attack surface. **System → Advanced → Networking → uncheck Allow IPv6**.
 
+![System → Advanced → Networking — showing IPv6 disabled](/images/IPv6.png)
+*System → Advanced → Networking — showing IPv6 disabled*
+
 **Verify UPnP is off** — UPnP lets devices punch holes in your firewall automatically. It's off by default in pfSense and should stay that way. **Services → UPnP & NAT-PMP** — confirm it's not enabled.
 
 **Verify SNMP is off** — same reasoning. Off by default, should stay off unless you specifically need it.
@@ -112,6 +124,9 @@ scp -i /volume1/homes/jordanp/.ssh/id_ed25519_pfsense \
   /volume1/homes/jordanp/backups/pfsense/config-$DATE.xml
 ```
 
+![Synology Task Scheduler — showing the pfSense backup job configured at 3am](/images/Synology-Task.png)
+*Synology Task Scheduler — showing the pfSense backup job configured at 3am*
+
 Getting SSH key auth working between Synology DSM and pfSense took more fiddling than expected. A few things the Synology docs don't make obvious.
 
 > **Note:** I'm running DSM 6.2.4-25556 Update 8. Synology made significant changes to SSH handling in DSM 7 — if you're on a newer version some of these gotchas may not apply, or may present differently. Worth checking the DSM 7 release notes if things aren't behaving as described here.
@@ -125,6 +140,11 @@ Getting SSH key auth working between Synology DSM and pfSense took more fiddling
 **Use `/bin/date` not `date` in scripts** — Task Scheduler runs with a limited PATH. `date` isn't found; `/bin/date` is. This one burned 20 minutes.
 
 The backup key for the NAS is separate from the daily-use Mac key and lives in its own Bitwarden secure note. The pfSense firewall rule on abyss allows the NAS to SSH outbound to pfSense on port 22 — without that rule the backup script fails silently.
+
+![Backup files on NAS — showing the dated config.xml files in the backups folder](/images/Backup-Files.png)
+*Backup files on NAS — showing the dated config.xml files in the backups folder*
+
+---
 
 ## What's next
 
