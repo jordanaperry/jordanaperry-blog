@@ -5,6 +5,10 @@ draft: false
 tags: ["homelab", "networking", "pfsense", "security", "pfblockerng"]
 series: ["Homelab Journey"]
 description: "Installing pfBlockerNG, getting DNSBL running, and the PHP memory fix that isn't documented anywhere obvious."
+cover:
+  image: "/images/banners/banner-post-07.svg"
+  alt: "pfSense: DNS-Level Blocking with pfBlockerNG"
+  relative: false
 ---
 pfBlockerNG is a pfSense package that plugs into Unbound and blocks ads, tracking domains, malware, and known-bad IP addresses at the DNS level — before any request ever leaves the network. No browser extension required. No client configuration. Every device on every VLAN gets the benefit automatically, including IoT devices that you can't install anything on.
 
