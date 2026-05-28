@@ -1,4 +1,5 @@
 ---
+title: "pfSense: The Hardware and VLAN Design"
 cover:
   image: "/images/banners/banner-post-02.svg"
   alt: "pfSense: The Hardware and VLAN Design"
