@@ -1,5 +1,8 @@
 ---
-title: "pfSense: The Hardware and VLAN Design"
+cover:
+  image: "/images/banners/banner-post-02.svg"
+  alt: "pfSense: The Hardware and VLAN Design"
+  relative: false
 date: 2026-05-24
 draft: false
 tags: ["homelab", "networking", "pfsense", "vlan"]
@@ -17,6 +20,9 @@ This post covers the foundation: the hardware running pfSense, and how I designe
 ## The Hardware
 
 pfSense runs on a Qotom Q330G4 — a fanless mini PC with four Intel NICs. It draws about 10 watts at idle, makes no noise, and has more network ports than a home lab needs, which is exactly what you want in a firewall appliance.
+
+![Photo of the Qotom Q330G4](/images/Qotom-mini-q300g4.jpg)
+*Photo of the Qotom Q330G4*
 
 The hostname is `krakenfw`. The kraken watches over everything that flows in and out. It seemed right.
 
@@ -73,7 +79,12 @@ When I'm reading firewall logs and I see `nautilus.drift` trying to reach `wreck
 
 All five VLAN interfaces run off `igb1` as 802.1Q tagged subinterfaces. pfSense sees each one as a separate interface.
 
-In the GUI: **Interfaces → VLANs → Add** for each VLAN tag (10, 20, 30, 40, 50), all with `igb1` as the parent. Then **Interfaces → Assignments** to add each VLAN as an interface (OPT1 through OPT5), enable each one, set IPv4 to static, and assign the gateway IP for that subnet:
+In the GUI: **Interfaces → VLANs → Add** for each VLAN tag (10, 20, 30, 40, 50), all with `igb1` as the parent. 
+
+![Interfaces → VLANs — the full list showing all five tagged subinterfaces on igb1](/images/Interfaces-VLANs)
+*Interfaces → VLANs — the full list showing all five tagged subinterfaces on igb1*
+
+Then **Interfaces → Assignments** to add each VLAN as an interface (OPT1 through OPT5), enable each one, set IPv4 to static, and assign the gateway IP for that subnet:
 
 | Interface | IP | Description |
 |---|---|---|
@@ -82,6 +93,12 @@ In the GUI: **Interfaces → VLANs → Add** for each VLAN tag (10, 20, 30, 40, 
 | OPT3 | 192.168.30.1 | twilight |
 | OPT4 | 192.168.40.1 | midnight |
 | OPT5 | 192.168.50.1 | abyss |
+
+![Interfaces → Assignments — showing OPT1–OPT5 mapped to each VLAN](/images/Interface-Assignments.png)
+*Interfaces → Assignments — showing OPT1–OPT5 mapped to each VLAN*
+
+![One VLAN interface config page — showing static IP, description, and enabled state (reef is a good example)](/images/VLAN-Interface-Config.png)
+*One VLAN interface config page — showing static IP, description, and enabled state (reef is a good example)*
 
 Quick SSH verify once everything is saved:
 
