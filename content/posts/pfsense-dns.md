@@ -5,6 +5,10 @@ draft: false
 tags: ["homelab", "networking", "pfsense", "dns"]
 series: ["Homelab Journey"]
 description: "Setting up Unbound for internal hostname resolution, DNSSEC, and the rebind protection trap everyone hits."
+cover:
+  image: "/images/banners/banner-post-04.svg"
+  alt: "pfSense: Internal DNS with Unbound"
+  relative: false
 ---
 Once the VLANs and firewall rules are in place, the next quality-of-life improvement is DNS. Without it, reaching any internal service means remembering IP addresses. With it, `ssh leviathan` just works, `https://krakenfw.home:8443` opens the pfSense GUI, and the NAS lives at `wreck.abyss` on every device on the network.
 
@@ -22,6 +26,9 @@ A few settings worth changing from defaults:
 - **Network interfaces**: All
 - **Outgoing network interfaces**: All
 - **System Domain Local Zone Type**: Static — this tells Unbound that `.home` is a local zone it handles authoritatively, not something to forward upstream.
+
+![Services → DNS Resolver — general settings page showing DNSSEC enabled and interface config](/images/Enabling-Unbound.png)
+*Services → DNS Resolver — general settings page showing DNSSEC enabled and interface config*
 
 ---
 
@@ -42,9 +49,13 @@ Host overrides are how you map hostnames to IPs. Every device in the lab gets on
 | zapper | drift | 192.168.20.12 | Microwave |
 | hydra | drift | 192.168.20.13 | Stove |
 
-A few things worth noting here.
+![Services → DNS Resolver → Host Overrides — full list of all entries](/images/Host-Overrides.png)
+*Services → DNS Resolver → Host Overrides — full list of all entries*
 
 `krakenfw` is added as a CNAME alias under the `regulator` host override, not as a separate entry. The system hostname is `regulator` — `krakenfw` is the friendly name. Unbound handles CNAME chaining natively, so both resolve to the same IP.
+
+![One host override entry — showing the CNAME setup for krakenfw/regulator](/images/CNAME-Setup.png)
+*One host override entry — showing the CNAME setup for krakenfw/regulator*
 
 `wreck` uses the domain `abyss` instead of `home`, giving it the address `wreck.abyss`. Same for the IoT devices — `nautilus.drift`, `zapper.drift`, `hydra.drift`. The subdomain signals the VLAN in the hostname itself. When you're reading logs and you see `nautilus.drift` trying to make a connection somewhere, you know immediately what you're looking at: an IoT device going somewhere it shouldn't. The naming carries the threat model.
 
@@ -76,6 +87,9 @@ This means the failure isn't limited to browser access. `ssh leviathan.home` fai
 
 > *Potential DNS Rebind attack detected*
 
+![The rebind error in a browser — if you can reproduce it before adding the allowlist](/images/FD1zqtP.png)
+*The rebind error in a browser — if you can reproduce it before adding the allowlist*
+
 Everything else just times out, which makes it much harder to diagnose.
 
 The protection itself is legitimate. DNS rebind attacks are real — a malicious website serves a domain that initially resolves to its own IP, then switches the DNS response to an internal RFC1918 address. Your browser, still thinking it's talking to the original site, then sends requests to your internal network on the attacker's behalf. Blocking unrecognised RFC1918 resolutions cuts this off.
@@ -85,6 +99,9 @@ The fix is telling Unbound which internal hostnames are intentional. **System �
 ```
 krakenfw.home regulator.home leviathan.home helm.home wreck.abyss
 ```
+
+![System → Advanced → Alternate Hostnames — showing the allowlist populated](/images/Alternate-Hostnames.png)
+*System → Advanced → Alternate Hostnames — showing the allowlist populated*
 
 Space separated, all on one line. This is why all the internal hostnames need to be here — not just `krakenfw.home` for the GUI, but every device you want reachable by name. Any hostname you add to host overrides should also go here. Add them both at the same time and you'll never hit this again.
 
