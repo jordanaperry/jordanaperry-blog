@@ -5,6 +5,10 @@ draft: false
 tags: ["homelab", "networking", "pfsense", "dhcp"]
 series: ["Homelab Journey"]
 description: "Switching to Kea DHCP, setting up per-VLAN pools, and why every important device gets a static lease."
+cover:
+  image: "/images/banners/banner-post-05.svg"
+  alt: "pfSense: DHCP and Static Leases"
+  relative: false
 ---
 DHCP is the part of networking most people never think about — it just works. But in a segmented lab with six VLANs, a few deliberate choices here make everything else easier to manage.
 
@@ -16,7 +20,13 @@ pfSense 2.7+ ships with two DHCP backends: the older ISC DHCP server and the new
 
 **System → Advanced → Networking → DHCP Backend → Kea**
 
+![System → Advanced → Networking — showing Kea selected as the DHCP backend](/images/Kea-DHCP.png)
+*System → Advanced → Networking — showing Kea selected as the DHCP backend*
+
 Reboot after switching. Then configure pools per VLAN under **Services → DHCP Server**, where each VLAN interface now has its own tab.
+
+![Services → DHCP Server — showing the tab bar with all VLANs listed](/images/DHCP-Bar.png)
+*Services → DHCP Server — showing the tab bar with all VLANs listed*
 
 ---
 
@@ -31,6 +41,9 @@ Each VLAN gets a pool sized for its expected device count. I left the lower end 
 | twilight (30) | 192.168.30.100 – 120 |
 | midnight (40) | 192.168.40.100 – 150 |
 | abyss (50) | No pool — static only |
+
+![One VLAN DHCP pool config — reef showing the range and settings](/images/DHCP-Config.png)
+*One VLAN DHCP pool config — reef showing the range and settings*
 
 `abyss` has no DHCP pool at all. The NAS has a static IP and nothing else should ever appear on that VLAN. No pool means no accidental device picking up an address there.
 
@@ -75,13 +88,21 @@ Every important device in the lab has one:
 |---|---|---|
 | Synology NAS | wreck | 192.168.50.10 |
 
+![Static Mappings list for reef — showing manta and orca with their IPs](/images/DHCP-Static.png)
+*Static Mappings list for reef — showing manta and orca with their IPs*
+
 To add a static lease: **Services → DHCP Server → [VLAN tab] → Static Mappings → Add**. You need the MAC address of the device, the IP you want to assign, and optionally a hostname. The hostname field in Kea will also register the device in Unbound if you have that integration enabled.
 
 ---
 
 ## Finding MAC addresses
 
-For devices already on the network, the easiest way is **Status → DHCP Leases** in pfSense — it shows every active lease with its MAC. For IoT devices that haven't connected to the right VLAN yet, check the device's settings menu or the label on the back of the hardware.
+For devices already on the network, the easiest way is **Status → DHCP Leases** in pfSense — it shows every active lease with its MAC.
+
+![Status → DHCP Leases — showing active leases across VLANs with hostnames](/images/DHCP-Leases.png)
+*Status → DHCP Leases — showing active leases across VLANs with hostnames*
+
+For IoT devices that haven't connected to the right VLAN yet, check the device's settings menu or the label on the back of the hardware.
 
 ---
 
