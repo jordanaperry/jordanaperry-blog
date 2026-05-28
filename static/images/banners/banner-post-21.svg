@@ -1,0 +1,32 @@
+<svg width="680" height="160" viewBox="0 0 680 160" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Post 21 — HashiCorp Vault for Secrets Management</title>
+<desc>IAM STACK · POST 21 · abyss zone · 1000m+</desc>
+<defs><style>text{font-family:system-ui,-apple-system,sans-serif;}</style></defs>
+  <rect x="0" y="0" width="680" height="160" rx="12" fill="#2C2C2A"/>
+  <path d="M0 112 Q170 90 340 108 Q510 128 680 108 L680 160 L0 160 Z" fill="#444441" opacity="0.5"/>
+  <path d="M0 132 Q170 112 340 128 Q510 146 680 128 L680 160 L0 160 Z" fill="#1A1A18" opacity="0.85"/>
+  
+  <circle cx="450" cy="35"  r="1.5" fill="#5F5E5A" opacity="0.5"/>
+  <circle cx="490" cy="70"  r="1"   fill="#5F5E5A" opacity="0.4"/>
+  <circle cx="530" cy="45"  r="2"   fill="#5F5E5A" opacity="0.35"/>
+  <circle cx="570" cy="90"  r="1.5" fill="#5F5E5A" opacity="0.45"/>
+  <circle cx="610" cy="55"  r="1"   fill="#5F5E5A" opacity="0.4"/>
+  <circle cx="640" cy="110" r="2"   fill="#5F5E5A" opacity="0.3"/>
+  <circle cx="470" cy="115" r="1.5" fill="#5F5E5A" opacity="0.35"/>
+  <circle cx="510" cy="30"  r="1"   fill="#5F5E5A" opacity="0.4"/>
+  <circle cx="550" cy="80"  r="2.5" fill="#5F5E5A" opacity="0.3"/>
+  <circle cx="590" cy="35"  r="1"   fill="#5F5E5A" opacity="0.45"/>
+  <circle cx="630" cy="75"  r="1.5" fill="#5F5E5A" opacity="0.35"/>
+  <circle cx="660" cy="40"  r="2"   fill="#5F5E5A" opacity="0.3"/>
+  <line x1="450" y1="35"  x2="490" y2="70"  stroke="#5F5E5A" stroke-width="0.4" opacity="0.2"/>
+  <line x1="490" y1="70"  x2="530" y2="45"  stroke="#5F5E5A" stroke-width="0.4" opacity="0.2"/>
+  <line x1="530" y1="45"  x2="570" y2="90"  stroke="#5F5E5A" stroke-width="0.4" opacity="0.2"/>
+  <line x1="570" y1="90"  x2="610" y2="55"  stroke="#5F5E5A" stroke-width="0.4" opacity="0.2"/>
+  <line x1="610" y1="55"  x2="640" y2="110" stroke="#5F5E5A" stroke-width="0.4" opacity="0.2"/>
+  <rect x="0" y="0" width="680" height="160" rx="12" fill="none" stroke="#5F5E5A" stroke-width="0.5" opacity="0.3"/>
+  <rect x="40" y="20" width="94" height="20" rx="10" fill="#5F5E5A" opacity="0.25"/>
+  <text x="87" y="30" text-anchor="middle" dominant-baseline="central" style="font-size:10px;font-weight:500;fill:#D3D1C7;letter-spacing:1px;">ABYSS ZONE</text>
+  <text x="40" y="66" style="font-size:11px;font-weight:400;fill:#888780;letter-spacing:1px;">IAM STACK · POST 21</text>
+  <text x="40" y="98" style="font-size:26px;font-weight:500;fill:#F1EFE8;">HashiCorp Vault for Secrets Management</text>
+  <text x="638" y="20" text-anchor="end" style="font-size:10px;font-weight:400;fill:#5F5E5A;letter-spacing:2px;">1000m+</text>
+</svg>

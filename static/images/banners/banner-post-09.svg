@@ -1,0 +1,25 @@
+<svg width="680" height="160" viewBox="0 0 680 160" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Post 9 — Running the Controller on Proxmox</title>
+<desc>UNIFI SERIES · POST 9 · reef zone · 0–200m</desc>
+<defs><style>text{font-family:system-ui,-apple-system,sans-serif;}</style></defs>
+  <rect x="0" y="0" width="680" height="160" rx="12" fill="#04342C"/>
+  <path d="M0 112 Q170 90 340 108 Q510 128 680 108 L680 160 L0 160 Z" fill="#04342C" opacity="0.5"/>
+  <path d="M0 132 Q170 112 340 128 Q510 146 680 128 L680 160 L0 160 Z" fill="#04342C" opacity="0.85"/>
+  
+  <ellipse cx="570" cy="140" rx="38" ry="55"  fill="#085041" opacity="0.6"/>
+  <ellipse cx="615" cy="132" rx="24" ry="45"  fill="#085041" opacity="0.5"/>
+  <ellipse cx="530" cy="148" rx="18" ry="36"  fill="#0F6E56" opacity="0.4"/>
+  <ellipse cx="590" cy="152" rx="28" ry="30"  fill="#0F6E56" opacity="0.45"/>
+  <ellipse cx="648" cy="142" rx="16" ry="38"  fill="#085041" opacity="0.4"/>
+  <circle cx="555" cy="90"  r="3" fill="#1D9E75" opacity="0.4"/>
+  <circle cx="585" cy="62"  r="2" fill="#1D9E75" opacity="0.3"/>
+  <circle cx="610" cy="80"  r="2" fill="#1D9E75" opacity="0.35"/>
+  <circle cx="630" cy="45"  r="3" fill="#1D9E75" opacity="0.25"/>
+  <path d="M420 16 Q460 10 500 16 Q540 22 580 16 Q620 10 660 16" fill="none" stroke="#5DCAA5" stroke-width="1" opacity="0.3"/>
+  <rect x="0" y="0" width="680" height="160" rx="12" fill="none" stroke="#0F6E56" stroke-width="0.5" opacity="0.3"/>
+  <rect x="40" y="20" width="87" height="20" rx="10" fill="#1D9E75" opacity="0.25"/>
+  <text x="83" y="30" text-anchor="middle" dominant-baseline="central" style="font-size:10px;font-weight:500;fill:#9FE1CB;letter-spacing:1px;">REEF ZONE</text>
+  <text x="40" y="66" style="font-size:11px;font-weight:400;fill:#1D9E75;letter-spacing:1px;">UNIFI SERIES · POST 9</text>
+  <text x="40" y="98" style="font-size:26px;font-weight:500;fill:#E1F5EE;">Running the Controller on Proxmox</text>
+  <text x="638" y="20" text-anchor="end" style="font-size:10px;font-weight:400;fill:#0F6E56;letter-spacing:2px;">0–200m</text>
+</svg>

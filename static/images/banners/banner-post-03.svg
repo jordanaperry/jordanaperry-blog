@@ -1,0 +1,28 @@
+<svg width="680" height="160" viewBox="0 0 680 160" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Post 3 — Firewall Rules and Segmentation</title>
+<desc>PFSENSE SERIES · POST 3 · midnight zone · 200–1000m</desc>
+<defs><style>text{font-family:system-ui,-apple-system,sans-serif;}</style></defs>
+  <rect x="0" y="0" width="680" height="160" rx="12" fill="#042C53"/>
+  <path d="M0 112 Q170 90 340 108 Q510 128 680 108 L680 160 L0 160 Z" fill="#0C447C" opacity="0.5"/>
+  <path d="M0 132 Q170 112 340 128 Q510 146 680 128 L680 160 L0 160 Z" fill="#031E3A" opacity="0.85"/>
+  
+  <line x1="420" y1="0"   x2="420" y2="115" stroke="#378ADD" stroke-width="0.5" opacity="0.18"/>
+  <line x1="490" y1="0"   x2="490" y2="115" stroke="#378ADD" stroke-width="0.5" opacity="0.18"/>
+  <line x1="560" y1="0"   x2="560" y2="115" stroke="#378ADD" stroke-width="0.5" opacity="0.18"/>
+  <line x1="630" y1="0"   x2="630" y2="115" stroke="#378ADD" stroke-width="0.5" opacity="0.18"/>
+  <line x1="420" y1="38"  x2="680" y2="38"  stroke="#378ADD" stroke-width="0.5" opacity="0.18"/>
+  <line x1="420" y1="76"  x2="680" y2="76"  stroke="#378ADD" stroke-width="0.5" opacity="0.18"/>
+  <rect x="424" y="42"  width="62" height="30" rx="3" fill="#185FA5" opacity="0.35"/>
+  <rect x="494" y="42"  width="62" height="30" rx="3" fill="#185FA5" opacity="0.35"/>
+  <rect x="564" y="42"  width="62" height="30" rx="3" fill="#993C1D" opacity="0.55"/>
+  <rect x="424" y="80"  width="62" height="30" rx="3" fill="#185FA5" opacity="0.2"/>
+  <rect x="494" y="80"  width="62" height="30" rx="3" fill="#185FA5" opacity="0.35"/>
+  <rect x="564" y="80"  width="62" height="30" rx="3" fill="#185FA5" opacity="0.2"/>
+  <text x="595" y="57" text-anchor="middle" dominant-baseline="central" style="font-size:8px;font-weight:500;fill:#F5C4B3;letter-spacing:1px;font-family:system-ui,sans-serif;">BLOCK</text>
+  <rect x="0" y="0" width="680" height="160" rx="12" fill="none" stroke="#185FA5" stroke-width="0.5" opacity="0.3"/>
+  <rect x="40" y="20" width="115" height="20" rx="10" fill="#185FA5" opacity="0.25"/>
+  <text x="97" y="30" text-anchor="middle" dominant-baseline="central" style="font-size:10px;font-weight:500;fill:#85B7EB;letter-spacing:1px;">MIDNIGHT ZONE</text>
+  <text x="40" y="66" style="font-size:11px;font-weight:400;fill:#378ADD;letter-spacing:1px;">PFSENSE SERIES · POST 3</text>
+  <text x="40" y="98" style="font-size:26px;font-weight:500;fill:#E6F1FB;">Firewall Rules and Segmentation</text>
+  <text x="638" y="20" text-anchor="end" style="font-size:10px;font-weight:400;fill:#185FA5;letter-spacing:2px;">200–1000m</text>
+</svg>
