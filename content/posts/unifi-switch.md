@@ -10,6 +10,7 @@ tags: ["homelab", "networking", "unifi", "vlan", "switch"]
 series: ["Homelab Journey"]
 description: "Configuring the USW Flex 2.5G, port assignments, DHCP guarding, and two SSIDs with very different security postures."
 ---
+
 The pfSense side of the network is fully configured — VLANs defined, firewall rules written, DNS resolving, DHCP handing out static leases. But none of that segmentation actually works until the switch enforces it at the physical layer. This post covers the Unifi switch setup: creating the networks, assigning ports, and getting the two WiFi SSIDs running with the right security settings for their respective VLANs.
 
 ---
@@ -18,7 +19,7 @@ The pfSense side of the network is fully configured — VLANs defined, firewall 
 
 The switch is a Ubiquiti USW Flex 2.5G 8 PoE running firmware 2.1.8, managed through the Unifi Network Application running on `helm` (192.168.40.20) — a Proxmox container on `leviathan`. The next post covers getting that controller running. For now, everything here is configured through it.
 
-![Photo of the USW Flex 2.5G](/images/TODO.png)
+![Photo of the USW Flex 2.5G](/images/uswflex.png)
 *Photo of the USW Flex 2.5G*
 
 ---
@@ -37,12 +38,12 @@ The key setting for every network here: **VLAN Only**. pfSense handles all routi
 | midnight | 40 | 192.168.40.1 |
 | abyss | 50 | 192.168.50.1 |
 
-![Settings → Networks — the full network list showing all five VLANs](/images/TODO.png)
+![Settings → Networks — the full network list showing all five VLANs](/images/unifivlans.png)
 *Settings → Networks — the full network list showing all five VLANs*
 
 **DHCP Guarding** deserves a mention. Enable it on every VLAN and set the trusted DHCP server IP to the pfSense gateway for that subnet. This blocks any rogue device from spinning up its own DHCP server and handing out addresses on your network — a surprisingly common IoT device behavior. On `drift` especially, this is worth having.
 
-![One network config page — showing VLAN only mode and DHCP guarding enabled (drift is a good example)](/images/TODO.png)
+![One network config page — showing VLAN only mode and DHCP guarding enabled (drift is a good example)](/images/unifidrift.png)
 *One network config page — showing VLAN only mode and DHCP guarding enabled (drift is a good example)*
 
 ---
@@ -61,19 +62,19 @@ This is where the physical segmentation gets enforced. Every port gets a profile
 | 8 | AP uplink (buoy) | Default (1) | reef (10), drift (20) |
 | 9 | pfSense uplink | Default (1) | reef, drift, twilight, midnight, abyss |
 
-![Devices → Switch → Ports — the port assignment overview showing all ports with their profiles](/images/TODO.png)
+![Devices → Switch → Ports — the port assignment overview showing all ports with their profiles](/images/unifiports.png)
 *Devices → Switch → Ports — the port assignment overview showing all ports with their profiles*
 
 A few things worth explaining here.
 
 **Port 2 — leviathan NIC 1** has Native VLAN set to None. This is intentional and important. Proxmox manages its own VLAN tagging via subinterfaces (`vmbr0.40`, `vmbr0.30`, etc.) — if the switch also applied a native VLAN tag, traffic would get double-tagged and nothing would work. Native VLAN: None tells the switch to pass all tagged traffic through untouched and let Proxmox sort it out.
 
-![Port 2 config — showing Native VLAN: None for the Proxmox trunk](/images/TODO.png)
+![Port 2 config — showing Native VLAN: None for the Proxmox trunk](/images/unifiport2.png)
 *Port 2 config — showing Native VLAN: None for the Proxmox trunk*
 
 **Port 3 — leviathan NIC 2** carries only untagged `abyss` traffic. This is the dedicated iSCSI storage link — a clean, single-purpose connection between Proxmox and the NAS that doesn't share bandwidth with VM traffic or get mixed up with other VLANs.
 
-![Port 3 config — showing abyss native VLAN for the storage link](/images/TODO.png)
+![Port 3 config — showing abyss native VLAN for the storage link](/images/unifiport3.png)
 *Port 3 config — showing abyss native VLAN for the storage link*
 
 **Port 9 — pfSense uplink** carries all VLANs tagged. This is the trunk port — everything flows through here to pfSense, where the firewall rules decide what's actually allowed.
@@ -95,7 +96,7 @@ Two SSIDs, two very different security postures.
 - Fast Roaming (802.11r): enabled
 - Client Isolation: disabled — reef devices can talk to each other
 
-![WiFi → TheReef settings — showing WPA3, band steering, fast roaming](/images/TODO.png)
+![WiFi → TheReef settings — showing WPA3, band steering, fast roaming](/images/unifithereef.png)
 *WiFi → TheReef settings — showing WPA3, band steering, fast roaming*
 
 WPA3 is worth enabling here even though some older devices don't support it. Any device that can't do WPA3 probably shouldn't be on the trusted VLAN anyway — put it on TheDrift.
@@ -110,7 +111,7 @@ WPA3 is worth enabling here even though some older devices don't support it. Any
 - Multicast and Broadcast Blocker: enabled — reduces IoT chatter
 - Band Steering: disabled — IoT devices are often 2.4GHz only
 
-![WiFi → TheDrift settings — showing IoT mode, client isolation, multicast blocker](/images/TODO.png)
+![WiFi → TheDrift settings — showing IoT mode, client isolation, multicast blocker](/images/unifithedrift.png)
 *WiFi → TheDrift settings — showing IoT mode, client isolation, multicast blocker*
 
 Client Isolation on TheDrift means even devices on the same VLAN can't reach each other. Combined with the firewall rules blocking all RFC1918 traffic, an IoT device is thoroughly isolated — it can reach the internet and nothing else, and it can't even see the other appliances on the same SSID.

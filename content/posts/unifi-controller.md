@@ -1,4 +1,3 @@
-#THIS NOTE NEEDS UPDATING!!!! We increased size of the Container
 ---
 title: "Unifi: Running the Controller on Proxmox"
 cover:
@@ -11,7 +10,8 @@ tags: ["homelab", "networking", "unifi", "proxmox", "lxc"]
 series: ["Homelab Journey"]
 description: "Installing the Unifi Network Application in an LXC container on Proxmox, migrating from an old controller, and the firewall rules that kept the switch and AP online."
 ---
-The Unifi Network Application needs to rßun somewhere. For most people that's a cloud account or a dedicated Unifi device. For a home lab, a lightweight LXC container on Proxmox is a better fit — no subscription, no cloud dependency, no extra hardware, and it's on your network where it belongs.
+
+The Unifi Network Application needs to run somewhere. For most people that's a cloud account or a dedicated Unifi device. For a home lab, a lightweight LXC container on Proxmox is a better fit — no subscription, no cloud dependency, no extra hardware, and it's on your network where it belongs.
 
 This post covers setting up `helm` — the Proxmox container running the Unifi controller — and migrating the switch and AP from the old controller that was running on my gaming PC.
 
@@ -93,7 +93,7 @@ One thing Ubiquiti changed and doesn't make obvious: the Inform Host Override fi
 
 After the restore, the switch and AP should re-adopt automatically within a few minutes. Check **Devices** in the controller — both should show as Connected.
 
-![Devices page — showing both manifold and buoy as Connected with uptime](/images/TODO.png)
+![Devices page — showing both manifold and buoy as Connected with uptime](/images/unifiinformhost.png)
 *Devices page — showing both manifold and buoy as Connected with uptime*
 
 If they show as Disconnected, check the firewall rules below.
@@ -119,7 +119,7 @@ And on the midnight interface, allow inbound from surface:
 Pass TCP · surface net → 192.168.40.20 · ports 8080, 8443 · Allow controller access
 ```
 
-![pfSense → Firewall → Rules → surface — showing the port 8080 and 8443 pass rules to helm](/images/TODO.png)
+![pfSense → Firewall → Rules → surface — showing the port 8080 and 8443 pass rules to helm](/images/unifipfsensefw.png)
 *pfSense → Firewall → Rules → surface — showing the port 8080 and 8443 pass rules to helm*
 
 Port 8080 is the critical one — without it devices show as offline even though they're physically connected and passing traffic correctly. The controller relies on devices actively checking in over 8080 to mark them online.
@@ -132,9 +132,6 @@ A few things worth setting up once the controller is running and devices are ado
 
 **Device SSH Authentication** — under Settings → System → Advanced → Device SSH Settings. Replace password authentication with an SSH key. Same reasoning as everywhere else — passwords are a liability.
 
-![Settings → System → Advanced → Device SSH Settings — showing SSH key auth enabled](/images/TODO.png)
-*Settings → System → Advanced → Device SSH Settings — showing SSH key auth enabled*
-
 **Auto-update schedule** — set devices to update at 3am, same as everything else in the lab. Unifi firmware updates occasionally break things, so having a consistent update window makes it easier to correlate issues.
 
 **Inform Host Override** — double check this is set to `192.168.40.20`. If it ever gets cleared, devices will lose contact with the controller after a restart.
@@ -146,3 +143,85 @@ A few things worth setting up once the controller is running and devices are ado
 Unifi is done — switch configured, controller running, devices adopted and online. The entire network stack is now in place: pfSense handling routing and security, the Unifi switch enforcing VLANs at the physical layer, and the controller managing it all from a container on Proxmox.
 
 Next up: Proxmox itself — how leviathan is set up, VLAN tagging for VM and container networking, and iSCSI storage from the NAS.
+
+---
+
+## Recovering a lost Unifi controller password
+
+This happened to me shortly after getting the controller running. Documenting it here because the fix is non-obvious and the root cause is worth understanding.
+
+### What happened
+
+The controller became completely inaccessible — the login page loaded but every password attempt failed. No way in through the UI.
+
+### Root cause
+
+The container was originally provisioned with 1GB RAM. The Java process was consuming 63% of it, leaving MongoDB starved and swapping heavily. MongoDB was barely responsive even before the password issue surfaced. The password problem and the memory problem were related — a degraded MongoDB can cause authentication to fail in unexpected ways.
+
+**The fix requires bumping RAM first.** Trying to recover the password on a memory-starved container will fail or produce inconsistent results.
+
+### Step 1 — increase container memory
+
+From `leviathan`:
+
+```bash
+ssh leviathan
+pct set 100 -memory 2048
+pct reboot 100
+```
+
+Wait for the container to come back up fully before continuing.
+
+### Step 2 — find the admin username via MongoDB
+
+```bash
+pct enter 100
+mongosh --host 127.0.0.1 --port 27117
+```
+
+Inside the mongosh shell:
+
+```javascript
+use ace
+db.admin.find({}, {name: 1, email: 1})
+```
+
+This returns the admin username. In my case: `jordanallanperry`.
+
+### Step 3 — generate a new password hash
+
+Exit mongosh and run this from the container shell:
+
+```bash
+python3 -c "import crypt; print(crypt.crypt('NewPassword123', crypt.mksalt(crypt.METHOD_SHA512)))"
+```
+
+Copy the full hash output.
+
+### Step 4 — update the password in MongoDB
+
+Back in mongosh:
+
+```javascript
+use ace
+db.admin.updateOne(
+  {name: "jordanallanperry"},
+  {$set: {x_shadow: "paste_hash_here"}}
+)
+```
+
+### Step 5 — restart Unifi and log in
+
+```bash
+service unifi restart
+```
+
+Wait 60–90 seconds for the controller to fully start, then log in with the temporary password. Change it immediately in the UI and update Bitwarden.
+
+### Gotchas
+
+- `mongosh` commands must be run inside the mongosh shell — not bash
+- `use ace` is required to switch to the Unifi database before running any queries
+- `x_shadow` is the field that stores the hashed password — not `password` or `hash`
+- Unifi uses SHA-512 crypt format
+- The controller needs minimum 2GB RAM — 1GB causes MongoDB to swap and become unresponsive, which can surface as authentication failures rather than obvious memory errors
