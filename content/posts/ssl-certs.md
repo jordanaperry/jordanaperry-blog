@@ -57,7 +57,7 @@ You get a **Key** and a **Secret**. Store both in Bitwarden immediately — the 
 
 After install, ACME appears under **Services → ACME Certificates**.
 
-![System → Package Manager showing ACME package installed](/images/TODO.png)
+![System → Package Manager showing ACME package installed](/images/pfsense-packages.png)
 *Package Manager — ACME installed*
 
 ---
@@ -74,7 +74,7 @@ After install, ACME appears under **Services → ACME Certificates**.
 
 Click **Create new account key** then **Register ACME account key**. This registers your email with Let's Encrypt's CA — they'll email you when certs are expiring.
 
-![ACME Account Keys page showing letsencrypt-prod registered](/images/TODO.png)
+![ACME Account Keys page showing letsencrypt-prod registered](/images/pfsense-acme.png)
 *Services → ACME Certificates → Account Keys — letsencrypt-prod registered*
 
 ---
@@ -107,7 +107,7 @@ This ensures pfSense picks up the new cert automatically after each renewal.
 
 Click **Issue/Renew**. pfSense will call the GoDaddy API, create a TXT record, wait for Let's Encrypt to verify it, then remove the record and store the cert. The whole process takes about 60 seconds.
 
-![ACME Certificates page showing jordanaperry-wildcard issued successfully](/images/TODO.png)
+![ACME Certificates page showing jordanaperry-wildcard issued successfully](/images/pfsense-acmecert.png)
 *Services → ACME Certificates — wildcard cert issued*
 
 ---
@@ -118,7 +118,7 @@ Click **Issue/Renew**. pfSense will call the GoDaddy API, create a TXT record, w
 
 pfSense restarts its web interface. Access it at `https://krakenfw.jordanaperry.com:8443` — green padlock, no warnings.
 
-![pfSense GUI showing green padlock with jordanaperry.com certificate](/images/TODO.png)
+![pfSense GUI showing green padlock with jordanaperry.com certificate](/images/certificate.png)
 *pfSense login page — trusted SSL cert, no warnings*
 
 ---
