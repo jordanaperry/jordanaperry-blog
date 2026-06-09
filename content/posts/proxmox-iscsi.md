@@ -38,7 +38,7 @@ iSCSI on Synology is managed through **iSCSI Manager** in DSM.
 - Target name: `proxmox-storage`
 - No authentication (CHAP) for now — the abyss VLAN firewall rules already restrict who can reach the NAS
 
-![Synology iSCSI Manager — Target tab showing proxmox-storage target](/images/TODO.png)
+![Synology iSCSI Manager — Target tab showing proxmox-storage target](/images/proxmox-target.png)
 *Synology iSCSI Manager — the proxmox-storage target*
 
 **Step 2 — Create a LUN**
@@ -51,7 +51,7 @@ iSCSI on Synology is managed through **iSCSI Manager** in DSM.
 - Provisioning: Thick (pre-allocates space — more predictable performance than thin)
 - Map to: `proxmox-storage` target
 
-![Synology iSCSI Manager — LUN tab showing proxmox-lun mapped to proxmox-storage](/images/TODO.png)
+![Synology iSCSI Manager — LUN tab showing proxmox-lun mapped to proxmox-storage](/images/proxmox-lun.png)
 *Synology iSCSI Manager — 200GB LUN mapped to the proxmox-storage target*
 
 ---
@@ -69,7 +69,7 @@ In Proxmox: **Datacenter → Storage → Add → iSCSI**
 | Target | iqn.2000-01.com.synology:wreck.proxmox-storage |
 | Content | none (raw block device — LVM goes on top) |
 
-![Proxmox Datacenter → Storage showing wreck-iscsi added](/images/TODO.png)
+![Proxmox Datacenter → Storage showing wreck-iscsi added](/images/wreck-iscsi.png)
 *Datacenter → Storage — wreck-iscsi pointing to the NAS portal*
 
 Uncheck "Use LUNs directly" — you want raw block access so LVM can sit on top. If Proxmox can't reach the target, verify the nic1/vmbr1 interface is up and the abyss firewall rules allow iSCSI (port 3260) from midnight to abyss.
@@ -85,7 +85,7 @@ Uncheck "Use LUNs directly" — you want raw block access so LVM can sit on top.
 | Volume Group | wreck-vg |
 | Content | Disk image, Container |
 
-![Proxmox Datacenter → Storage showing wreck-lvm on top of wreck-iscsi](/images/TODO.png)
+![Proxmox Datacenter → Storage showing wreck-lvm on top of wreck-iscsi](/images/wreck-lvm.png)
 *wreck-lvm sitting on top of wreck-iscsi — this is what containers actually use*
 
 After adding, `wreck-lvm` appears in the storage list and is available when creating new containers. Any container created on `wreck-lvm` is backed by the NAS LUN.
@@ -126,7 +126,7 @@ New containers from CT 104 onwards were created directly on `wreck-lvm`. The nam
 
 For any container you do want to migrate, Proxmox has a built-in move disk function: right-click the container → **Move Volume** → select `wreck-lvm` as the target. The container needs to be stopped during the move.
 
-![Proxmox storage view showing wreck-lvm with used and available space](/images/TODO.png)
+![Proxmox storage view showing wreck-lvm with used and available space](/images/wreck-storageview.png)
 *wreck-lvm storage view — space used by containers on the NAS LUN*
 
 ---
