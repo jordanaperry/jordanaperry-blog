@@ -36,7 +36,7 @@ No open ports. No dynamic DNS. Works through any NAT, firewall, or mobile carrie
 
 Tailscale is available as a pfSense package. **System → Package Manager → Available Packages** — search `tailscale` and install.
 
-![System → Package Manager showing Tailscale package installed](/images/TODO.png)
+![System → Package Manager showing Tailscale package installed](/images/pfsense-packages.png)
 *Package Manager — Tailscale installed and available under VPN → Tailscale*
 
 After install, Tailscale appears under **VPN → Tailscale**.
@@ -75,7 +75,7 @@ Advertising routes isn't enough — you also have to approve them in the admin c
 
 **login.tailscale.com/admin/machines** → find `krakenfw` → click the `...` menu → **Edit route settings** → enable `192.168.0.0/16`.
 
-![Tailscale admin console — krakenfw with subnet route 192.168.0.0/16 approved](/images/TODO.png)
+![Tailscale admin console — krakenfw with subnet route 192.168.0.0/16 approved](/images/tailscale-subnet.png)
 *Tailscale admin → krakenfw — subnet route approved*
 
 While you're in the machine settings: also click `...` → **Disable key expiry**. By default Tailscale keys expire every 180 days and require re-authentication. A pfSense router losing its Tailscale connection unexpectedly because a key expired is not a good experience.
@@ -86,7 +86,7 @@ While you're in the machine settings: also click `...` → **Disable key expiry*
 
 Install Tailscale on your Mac from tailscale.com and sign in with the same account. One extra step required: in the Tailscale menu bar icon → **Use Tailscale subnets**. Without this, your Mac connects to the tailnet but doesn't actually route `192.168.x.x` traffic through pfSense.
 
-![Tailscale menu bar on Mac showing Use Tailscale subnets enabled](/images/TODO.png)
+![Tailscale menu bar on Mac showing Use Tailscale subnets enabled](/images/tailscale-settings.png)
 *Tailscale menu bar — Use Tailscale subnets must be enabled to route VLAN traffic*
 
 ---
