@@ -28,7 +28,7 @@ leviathan      wreck
 192.168.40.10  192.168.50.10
 ```
 
-The bastion is the only server reachable directly over SSH from the Mac. Every other server has iptables rules that drop SSH connections from anything other than `192.168.40.50`. Combined with Tailscale for the outer layer of access control, this means SSH access requires: Tailscale authentication, then bastion authentication, then target server authentication. Three separate credential checks.
+The bastion is the only server reachable directly over SSH from the Mac. Every other server has iptables rules that drop SSH connections from anything other than `192.168.40.50`. Locally, that means everything goes Mac → bastion → target. Remotely over Tailscale, there's an extra outer layer — Tailscale authentication before you even reach the bastion. Either way, no server in the lab accepts a direct SSH connection from a client machine.
 
 ---
 
@@ -109,7 +109,7 @@ RAM: 512MB
 Disk: 8GB
 ```
 
-![Proxmox CT 102 bastion summary page](/images/TODO.png)
+![Proxmox CT 102 bastion summary page](/images/bastion-summary.png)
 *Proxmox — CT 102 bastion container summary*
 
 **Create the user** — root SSH login is disabled, so create a non-root user:
@@ -141,6 +141,8 @@ LogLevel VERBOSE
 Restart: `systemctl restart sshd`
 
 **Install fail2ban:**
+
+fail2ban watches authentication logs and automatically bans IP addresses that fail too many times. If anything ever tries to brute-force the bastion — bots, scanners, whatever — fail2ban blocks them at the firewall level after a configurable number of failures. It's a lightweight but effective first line of defence on any internet-facing SSH port.
 
 ```bash
 apt install fail2ban -y
