@@ -39,7 +39,7 @@ reboot
 
 After the reboot, the Proxmox UI should show `leviathan` as the node name and the management interface is reachable at `https://leviathan.home:8006`.
 
-![Proxmox dashboard showing leviathan as the node name](/images/TODO.png)
+![Proxmox dashboard showing leviathan as the node name](/images/leviathan-dashboard.png)
 *Proxmox node overview — leviathan with all containers listed*
 
 ---
@@ -99,7 +99,7 @@ A few things worth explaining here.
 
 **`vmbr1`** — the storage bridge. It sits on nic1 and carries untagged abyss traffic. No IP assigned here — it's a passthrough for iSCSI traffic to the NAS.
 
-![Proxmox Network interfaces page showing vmbr0, vmbr0.40, and vmbr1](/images/TODO.png)
+![Proxmox Network interfaces page showing vmbr0, vmbr0.40, and vmbr1](/images/leviathan-network.png)
 *System → Network — showing both bridges and the management VLAN subinterface*
 
 ---
@@ -137,7 +137,7 @@ When creating any new LXC container in Proxmox, two settings in the **Network** 
 
 That's it. The container gets an IP from pfSense DHCP on that VLAN, or you assign a static one. The VLAN-aware bridge handles the tagging transparently.
 
-![Proxmox create CT network tab — showing vmbr0 and VLAN tag field](/images/TODO.png)
+![Proxmox create CT network tab — showing vmbr0 and VLAN tag field](/images/ct-network.png)
 *Create CT → Network — bridge set to vmbr0, VLAN tag set to 40 for a midnight container*
 
 To verify the VLAN tag is actually applied after container creation:
@@ -166,9 +166,6 @@ Here's what's running on leviathan now:
 | 107 | vault | 192.168.40.32 | midnight | wreck-lvm | HashiCorp Vault |
 
 The containers on `wreck-lvm` are using iSCSI storage from the NAS — covered in the next post. The earlier containers (100–103) are still on `local-lvm` (the M.2 drive) and work fine there.
-
-![Proxmox container list showing all 8 CTs with their IPs and statuses](/images/TODO.png)
-*Proxmox node view — all containers with status, VLAN, and storage*
 
 ---
 
