@@ -145,21 +145,23 @@ Without the alternate hostnames entry, pfSense's DNS rebind protection will bloc
 
 ## Deploying the cert to other services
 
-The wildcard cert lives on pfSense. To use it on other services you copy the cert and key files out and configure each service to use them.
+The wildcard cert lives on pfSense. To use it on other services you copy the cert and key files via your Mac in two steps — the services can't reach pfSense directly due to firewall rules, so the Mac acts as the intermediary.
 
-The cert files are at:
+**Step 1 — pull from pfSense to your Mac:**
+
+```bash
+scp admin@192.168.1.1:/var/etc/acme/jordanaperry-wildcard/fullchain.pem /tmp/jordanaperry.crt
+scp admin@192.168.1.1:/var/etc/acme/jordanaperry-wildcard/privkey.pem /tmp/jordanaperry.key
 ```
-/var/etc/acme/jordanaperry-wildcard/
-  - fullchain.pem
-  - privkey.pem
+
+**Step 2 — push from your Mac to the target service:**
+
+```bash
+scp /tmp/jordanaperry.crt root@192.168.40.30:/etc/ssl/jordanaperry.crt
+scp /tmp/jordanaperry.key root@192.168.40.30:/etc/ssl/jordanaperry.key
 ```
 
-For each service — Proxmox, Unifi, Gitea, Grafana, Keycloak, Vault — the procedure is:
-1. SCP the cert files to the container
-2. Configure the service to use them
-3. Restart the service
-
-The procedure varies per service and deserves its own post. The short version: it works, everything is green, and there's a manual re-copy step needed when the cert renews every 90 days until an automation script is written.
+Repeat step 2 for each service with the correct destination IP. Then configure each service to use those cert files and restart it. The cert auto-renews on pfSense every 90 days — when it does, you'll need to re-copy to any service that received a manual deployment.
 
 ---
 
