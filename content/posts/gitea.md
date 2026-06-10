@@ -21,8 +21,6 @@ This post covers the installation, the web installer workaround, the Nginx rever
 
 The practical reasons: no rate limits, no external dependency for CI/CD pipelines, webhooks that can fire to internal private IPs that GitHub could never reach. For a homelab running an auto-deploy blog pipeline, Gitea's ability to webhook to `192.168.30.10:9000` (an internal DMZ address) is specifically why it's here rather than relying on GitHub.
 
-The portfolio reason: running your own Git server is itself a portfolio item. Understanding how webhooks, deploy keys, and repository permissions work at the server level — not just as a consumer of GitHub's UI — is relevant for IAM and infrastructure roles.
-
 ---
 
 ## The container
@@ -133,7 +131,7 @@ WantedBy=multi-user.target
 systemctl enable --now gitea
 ```
 
-![Gitea running at gitea.jordanaperry.com — dashboard view](/images/TODO.png)
+![Gitea running at gitea.jordanaperry.com — dashboard view](/images/gitea.png)
 *Gitea dashboard — running on midnight, accessible via Nginx reverse proxy*
 
 ---
@@ -200,7 +198,7 @@ Gitea's built-in push mirror feature keeps public repos in sync with GitHub with
    - Authorization: GitHub username + token
    - Sync interval: every 8 hours (or trigger manually)
 
-![Gitea repository settings showing push mirror to GitHub configured](/images/TODO.png)
+![Gitea repository settings showing push mirror to GitHub configured](/images/gitea-push.png)
 *Gitea push mirror — homelab-terraform syncing to github.com/jordanaperry*
 
 After the first sync, the GitHub repo shows all commits with the original Gitea timestamps. From a portfolio perspective, everything looks like it came from GitHub — but the source of truth is the self-hosted Gitea instance.
@@ -227,14 +225,14 @@ Host gitea.jordanaperry.com
 
 ## LXC startup hang fix
 
-CT 103 occasionally hangs on `pct start` with a D-state umount process blocking. The fix:
+During initial setup, CT 103 would occasionally hang on `pct start` with a D-state umount process blocking. The fix at the time was:
 
 ```bash
 rm /run/lock/lxc/pve-config-103.lock
 pct start 103
 ```
 
-This came up during the initial setup when the container failed to start cleanly after a Proxmox host restart.
+The root cause turned out to be the slow M.2 drive in leviathan — the container storage was on `local-lvm` and disk I/O latency was causing the umount process to stall. After migrating CT 103 to `wreck-lvm` (iSCSI on the NAS) the issue stopped entirely.
 
 ---
 
