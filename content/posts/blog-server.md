@@ -35,6 +35,18 @@ https://blog.jordanaperry.com (public internet)
 
 The blog server lives in the twilight DMZ (VLAN 30) — public-facing, internet reachable, isolated from everything internal. It can reach Gitea (on midnight, VLAN 40) to pull code, and Gitea can reach it to fire the webhook. That's the only cross-VLAN traffic allowed.
 
+### How it all fits together
+
+It's worth spelling out the full flow before diving into each component, because there are a lot of moving parts:
+
+1. You write a post in VS Code and run `git push` — this sends the changes to Gitea
+2. Gitea fires a webhook — an HTTP POST to the blog server at port 9000
+3. The `webhook` binary on the blog server receives it, verifies the HMAC signature to confirm it came from Gitea, and runs the deploy script
+4. The deploy script does two things: `git pull` to grab the latest content from Gitea, then `hugo build` to regenerate the entire site into `/var/www/html`
+5. Nginx is already running and pointing at `/var/www/html` — the new content is live immediately
+
+The whole thing from `git push` to live takes about 5 seconds. Hugo itself takes 72ms — the rest is network and git.
+
 ---
 
 ## The container
@@ -78,12 +90,24 @@ Install Nginx:
 apt install nginx -y
 ```
 
-The blog uses the `*.jordanaperry.com` wildcard cert from pfSense. Copy the cert and key to the container:
+The blog uses the `*.jordanaperry.com` wildcard cert from pfSense. The cert lives on pfSense — to get it onto the blog server, copy it via your Mac in two steps. The blog server can't reach pfSense directly (twilight firewall rules block it), so the Mac acts as the intermediary.
+
+**Step 1 — pull from pfSense to your Mac:**
 
 ```bash
-scp pfSense:/var/etc/acme/jordanaperry-wildcard/fullchain.pem /etc/nginx/ssl/jordanaperry.crt
-scp pfSense:/var/etc/acme/jordanaperry-wildcard/privkey.pem /etc/nginx/ssl/jordanaperry.key
+scp admin@192.168.1.1:/var/etc/acme/jordanaperry-wildcard/fullchain.pem /tmp/jordanaperry.crt
+scp admin@192.168.1.1:/var/etc/acme/jordanaperry-wildcard/privkey.pem /tmp/jordanaperry.key
 ```
+
+**Step 2 — push from your Mac to the blog server:**
+
+```bash
+mkdir -p /etc/nginx/ssl   # run this on the blog server first
+scp /tmp/jordanaperry.crt root@192.168.30.10:/etc/nginx/ssl/jordanaperry.crt
+scp /tmp/jordanaperry.key root@192.168.30.10:/etc/nginx/ssl/jordanaperry.key
+```
+
+Note: the cert auto-renews on pfSense but the copy on the blog server won't update automatically — when the cert renews you'll need to repeat these two steps and restart Nginx.
 
 Nginx config at `/etc/nginx/sites-available/default`:
 
@@ -112,8 +136,6 @@ server {
 
 ![Nginx serving blog.jordanaperry.com with green padlock](/images/blog.png)
 *blog.jordanaperry.com — live with trusted SSL*
-
----
 
 ## Port forwards and DNS
 
@@ -181,7 +203,7 @@ Config at `/etc/webhook/hooks.json`:
 
 Run webhook as a systemd service on port 9000. When Gitea fires a push webhook, the listener verifies the HMAC signature and runs the deploy script.
 
-![webhook service running — systemctl status webhook showing active](/images/TODO.png)
+![webhook service running — systemctl status webhook showing active](/images/webhook.png)
 *systemctl status webhook — listener active on port 9000*
 
 **Gitea webhook** — in the blog repo settings: **Settings → Webhooks → Add Webhook → Gitea**:
@@ -192,7 +214,7 @@ Secret: (same secret as webhook config)
 Trigger: Push events
 ```
 
-![Gitea webhook config showing URL and recent successful deliveries](/images/TODO.png)
+![Gitea webhook config showing URL and recent successful deliveries](/images/webhook-delivery.png)
 *Gitea webhook — recent deliveries all green*
 
 ---
