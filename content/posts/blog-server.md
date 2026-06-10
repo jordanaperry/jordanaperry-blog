@@ -110,7 +110,7 @@ server {
 }
 ```
 
-![Nginx serving blog.jordanaperry.com with green padlock](/images/TODO.png)
+![Nginx serving blog.jordanaperry.com with green padlock](/images/blog.png)
 *blog.jordanaperry.com — live with trusted SSL*
 
 ---
