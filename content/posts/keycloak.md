@@ -137,7 +137,7 @@ Two important distinctions: always use `kc.sh start` (production mode), never `s
 
 If Keycloak fails with "database is read only" on first start, it means you ran `start-dev` as root during testing and the H2 data files are root-owned. Fix: `chown -R keycloak:keycloak /opt/keycloak`.
 
-![Keycloak admin console — homelab realm dashboard](/images/TODO.png)
+![Keycloak admin console — homelab realm dashboard](/images/keycloak.png)
 *Keycloak admin console at keycloak.jordanaperry.com:8443 — homelab realm*
 
 ---
@@ -179,7 +179,7 @@ After saving, click **Synchronize all users**. FreeIPA users appear in Keycloak'
 
 **Fix the first name mapper** — by default Keycloak maps `cn` to the first name field. In FreeIPA, `cn` is the full common name, not just the first name. Edit the `first name` mapper and change the LDAP attribute from `cn` to `givenName`.
 
-![Keycloak User Federation page showing FreeIPA LDAP connected and synced](/images/TODO.png)
+![Keycloak User Federation page showing FreeIPA LDAP connected and synced](/images/keycloak-ldap.png)
 *User Federation — FreeIPA LDAP connected, users synchronized*
 
 ---
@@ -230,7 +230,7 @@ Two things worth calling out:
 
 **`GrafanaAdmin` not `Admin`.** In Grafana 13, `Admin` maps to organisation admin only. `GrafanaAdmin` maps to server admin, which also grants org admin. Using `Admin` in the role mapping path silently gives the Viewer role instead — no error, just wrong permissions.
 
-![Grafana login page showing Sign in with Keycloak button](/images/TODO.png)
+![Grafana login page showing Sign in with Keycloak button](/images/grafana-signon.png)
 *Grafana login — Keycloak SSO button alongside local login*
 
 ---
@@ -267,7 +267,7 @@ Then assign permissions: **Datacenter → Permissions → Add → User Permissio
 
 Log in via Keycloak first to auto-create the user in Proxmox, then assign the permissions as root. The user doesn't exist until the first Keycloak login.
 
-![Proxmox login page showing Keycloak realm option in the dropdown](/images/TODO.png)
+![Proxmox login page showing Keycloak realm option in the dropdown](/images/proxmox-realm.png)
 *Proxmox login — realm dropdown showing keycloak as an option*
 
 ---
