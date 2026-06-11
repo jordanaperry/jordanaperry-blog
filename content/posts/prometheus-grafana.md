@@ -46,7 +46,7 @@ Storage: wreck-lvm (iSCSI)
 
 One Proxmox-specific requirement: enable **Nesting** in the container features. Without it, some Grafana processes fail to start. In Proxmox: right-click CT 105 → **Options → Features → Nesting ✅**. If you're provisioning via Terraform, add `features { nesting = true }` to the container resource.
 
-![Proxmox CT 105 monitor — Options → Features showing Nesting enabled](/images/TODO.png)
+![Proxmox CT 105 monitor — Options → Features showing Nesting enabled](/images/nesting.png)
 *Proxmox CT 105 — Nesting enabled under container features*
 
 ---
@@ -137,7 +137,7 @@ URL: http://192.168.40.40:9090
 
 Save and test. You should see "Successfully queried the Prometheus API."
 
-![Grafana data source page showing Prometheus connected successfully](/images/TODO.png)
+![Grafana data source page showing Prometheus connected successfully](/images/grafana.png)
 *Grafana → Data Sources — Prometheus connected at 192.168.40.40:9090*
 
 ---
@@ -150,7 +150,7 @@ Rather than building dashboards from scratch, import the community-maintained No
 
 This gives you CPU usage, memory, disk I/O, network throughput, and load average for every scrape target. Use the **Nodename** dropdown in the dashboard to switch between hosts.
 
-![Grafana Node Exporter Full dashboard showing CPU and memory across all hosts](/images/TODO.png)
+![Grafana Node Exporter Full dashboard showing CPU and memory across all hosts](/images/grafana-dashboard.png)
 *Node Exporter Full dashboard — all midnight containers visible in the dropdown*
 
 ---
@@ -238,7 +238,7 @@ One important detail: the role mapping uses `GrafanaAdmin` — not `Admin`. Usin
 | vault | 192.168.40.32:9100 | ✅ UP |
 | blog | excluded (DMZ firewall) | ⛔ |
 
-![Prometheus targets page showing all hosts UP](/images/TODO.png)
+![Prometheus targets page showing all hosts UP](/images/prometheus.png)
 *Prometheus → Targets — all midnight hosts reporting UP*
 
 ---
