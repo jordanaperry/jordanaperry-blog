@@ -244,7 +244,7 @@ If you see unexpected changes, review them carefully before applying. Terraform 
 
 `homelab-terraform` on Gitea, mirrored to `github.com/jordanaperry/homelab-terraform`. The full container inventory, provider config, and variables file (without secrets) are all there.
 
-![VS Code showing homelab-terraform repo with main.tf open](/images/TODO.png)
+![VS Code showing homelab-terraform repo with main.tf open](/images/terraform.png)
 *homelab-terraform in VS Code — all 8 containers defined as code*
 
 ---
