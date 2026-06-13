@@ -7,7 +7,7 @@ series: ["Homelab Journey"]
 description: "Building a hardened SSH jumpbox on Proxmox — separate keys per server, ProxyJump config, fail2ban, and iptables rules that enforce the bastion as the only SSH entry point."
 cover:
   image: "/images/banners/banner-post-14.svg"
-  alt: "Bastion Host: SSH Access the Right"
+  alt: "Bastion Host: SSH Access the Right Way"
   relative: false
 ---
 
